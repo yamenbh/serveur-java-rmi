@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 
 import implementation.MachineServiceImpl;
 import implementation.SalleServiceImpl;
@@ -15,14 +16,28 @@ public class Serveur {
 	public static void main(String[] args) {
 		try {
 
-			ISalleService salleService = new SalleServiceImpl();
-			Naming.bind("rmi://localhost:1099/salleService", salleService);
+			ISalleService isalleService = new SalleServiceImpl();
+			
+			LocateRegistry.createRegistry(1052);
+			
+			Naming.bind("rmi://localhost:1099/isalleService", isalleService);
 
-			IMachineService machineService = new MachineServiceImpl();
-			Naming.bind("rmi://localhost:1099/machineService", machineService);
+			IMachineService imachineService = new MachineServiceImpl();
+			
+			LocateRegistry.createRegistry(1099);
+			
+			Naming.bind("rmi://localhost:1099/imachineService", imachineService);
 
 			System.out.println("En attente des clients");
-		} catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
+			
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AlreadyBoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
